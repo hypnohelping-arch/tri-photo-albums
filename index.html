@@ -9,11 +9,19 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .share-panel{margin-top:16px;padding:14px;background:#f8fafc;border:1px solid #dbe3ea;border-radius:14px}
+    .share-panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+    .share-panel-title{font-weight:800}.share-panel-meta{font-size:12px;color:#6b7280}
+    .share-panel input{margin:0 0 10px;font-size:12px}
+    .share-panel-actions{display:flex;gap:8px;flex-wrap:wrap}.share-panel-actions button{flex:1;min-width:130px}
+    @media(max-width:700px){.share-panel-actions{flex-direction:column}.share-panel-actions button{width:100%}}
+  </style>
 </head>
 <body>
   <header class="topbar">
     <div>
-      <div class="brand">Tri Photo Albums <span class="version">V1.1</span></div>
+      <div class="brand">Tri Photo Albums <span class="version">V1.2</span></div>
       <div id="subtitle" class="muted">pCloud • albums virtuels</div>
     </div>
     <div class="top-actions">
@@ -105,7 +113,20 @@
         <button id="btnCloseAlbumView" class="icon-btn dark">✕</button>
       </div>
       <div id="albumViewGrid" class="grid"></div>
-      <div class="dialog-actions sticky"><button id="btnShareAlbum" class="primary">Partager cet album</button></div>
+
+      <div id="savedSharePanel" class="share-panel hidden">
+        <div class="share-panel-head">
+          <div class="share-panel-title">🔗 Partage actif</div>
+          <div id="savedShareMeta" class="share-panel-meta"></div>
+        </div>
+        <input id="savedShareLink" readonly aria-label="Lien de partage enregistré">
+        <div class="share-panel-actions">
+          <button id="btnSavedCopy" class="secondary">Copier le lien</button>
+          <button id="btnSavedOpen" class="secondary">Ouvrir le lien</button>
+        </div>
+      </div>
+
+      <div class="dialog-actions sticky"><button id="btnShareAlbum" class="primary">Créer / remplacer le lien de partage</button></div>
     </div>
   </dialog>
 
