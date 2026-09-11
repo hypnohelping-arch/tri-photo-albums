@@ -13,34 +13,38 @@
 <body>
   <header class="topbar">
     <div>
-      <div class="brand">Tri Photo Albums</div>
+      <div class="brand">Tri Photo Albums <span class="version">V1.1</span></div>
       <div id="subtitle" class="muted">pCloud • albums virtuels</div>
     </div>
     <div class="top-actions">
-      <button id="btnSettings" class="icon-btn" title="Réglages" aria-label="Réglages">⚙️</button>
-      <button id="btnLogout" class="icon-btn hidden" title="Déconnexion" aria-label="Déconnexion">↪</button>
+      <span id="modeBadge" class="mode-badge hidden">DÉMO</span>
+      <button id="btnSettings" class="icon-btn hidden" title="Réglages" aria-label="Réglages">⚙️</button>
+      <button id="btnLogout" class="icon-btn hidden" title="Quitter" aria-label="Quitter">↪</button>
     </div>
   </header>
 
   <main id="app">
     <section id="screenSetup" class="screen">
-      <div class="card">
-        <h1>Connexion à pCloud</h1>
-        <p>Cette application ne demande jamais ton mot de passe pCloud. La connexion passe par la page officielle OAuth de pCloud.</p>
+      <div class="card setup-card">
+        <h1>Tri Photo Albums</h1>
+        <p>En attendant l'approbation pCloud, tu peux tester toute l'ergonomie avec des photos fictives. Rien n'est envoyé vers pCloud en mode démonstration.</p>
+        <button id="btnDemo" class="demo-btn wide">▶ Essayer le mode démonstration</button>
+        <div class="separator"><span>ou, quand pCloud aura validé l'application</span></div>
         <label class="field">
           <span>Client ID pCloud</span>
-          <input id="clientIdInput" autocomplete="off" placeholder="Ex. abcdef123456">
+          <input id="clientIdInput" autocomplete="off" placeholder="À saisir après validation pCloud">
         </label>
         <label class="field">
           <span>Dossier photo de départ</span>
-          <input id="basePathInput" autocomplete="off" value="/Photos" placeholder="/Photos ou /Photos(new)">
+          <input id="basePathInput" autocomplete="off" value="/Photos" placeholder="/Photos">
         </label>
-        <button id="btnSaveAndLogin" class="primary wide">Enregistrer et se connecter</button>
-        <p class="hint">Le Client ID n'est pas un mot de passe. Il identifie simplement notre petite application auprès de pCloud.</p>
+        <button id="btnSaveAndLogin" class="primary wide">Se connecter à pCloud</button>
+        <p class="hint">La connexion réelle passera par OAuth pCloud. L'application ne demande et n'enregistre jamais ton mot de passe pCloud.</p>
       </div>
     </section>
 
     <section id="screenMain" class="screen hidden">
+      <div id="demoNotice" class="demo-notice hidden">Mode démonstration : albums et modifications sont locaux à cet appareil. Aucune photo pCloud n'est touchée.</div>
       <nav class="tabs">
         <button class="tab active" data-view="photos">Photos</button>
         <button class="tab" data-view="albums">Albums</button>
@@ -52,7 +56,6 @@
           <div id="currentPath" class="path">/Photos</div>
           <button id="btnRefresh" class="secondary">↻</button>
         </div>
-
         <div id="selectionBar" class="selection-bar hidden">
           <span><strong id="selectionCount">0</strong> sélectionnée(s)</span>
           <div class="selection-actions">
@@ -61,7 +64,6 @@
             <button id="btnClearSelection" class="ghost">Annuler</button>
           </div>
         </div>
-
         <div id="photoGrid" class="grid"></div>
         <div id="photosEmpty" class="empty hidden">Aucune photo/vidéo dans ce dossier.</div>
       </section>
@@ -70,12 +72,12 @@
         <div class="toolbar">
           <div>
             <h2>Mes albums</h2>
-            <div class="muted">Collections pCloud — aucune copie des originaux</div>
+            <div id="albumSubtitle" class="muted">Collections pCloud — aucune copie des originaux</div>
           </div>
           <button id="btnRefreshAlbums" class="secondary">↻</button>
         </div>
         <div id="albumGrid" class="album-grid"></div>
-        <div id="albumsEmpty" class="empty hidden">Aucun album personnel pour l'instant.</div>
+        <div id="albumsEmpty" class="empty hidden">Aucun album pour l'instant. Sélectionne des photos puis crée ton premier album.</div>
       </section>
     </section>
   </main>
@@ -83,14 +85,8 @@
   <dialog id="albumDialog">
     <form method="dialog" class="dialog-card">
       <h3>Créer un album</h3>
-      <label class="field">
-        <span>Nom de l'album</span>
-        <input id="albumNameInput" autocomplete="off" maxlength="120" placeholder="Ex. Martinique 2026">
-      </label>
-      <div class="dialog-actions">
-        <button value="cancel" class="secondary">Annuler</button>
-        <button id="btnConfirmCreateAlbum" value="default" class="primary">Créer</button>
-      </div>
+      <label class="field"><span>Nom de l'album</span><input id="albumNameInput" autocomplete="off" maxlength="120" placeholder="Ex. Martinique 2026"></label>
+      <div class="dialog-actions"><button value="cancel" class="secondary">Annuler</button><button id="btnConfirmCreateAlbum" value="default" class="primary">Créer</button></div>
     </form>
   </dialog>
 
@@ -98,62 +94,44 @@
     <form method="dialog" class="dialog-card">
       <h3>Ajouter à un album</h3>
       <select id="albumSelect" size="8"></select>
-      <div class="dialog-actions">
-        <button value="cancel" class="secondary">Annuler</button>
-        <button id="btnConfirmAdd" value="default" class="primary">Ajouter</button>
-      </div>
+      <div class="dialog-actions"><button value="cancel" class="secondary">Annuler</button><button id="btnConfirmAdd" value="default" class="primary">Ajouter</button></div>
     </form>
   </dialog>
 
   <dialog id="albumViewDialog">
     <div class="dialog-card album-view">
       <div class="album-view-head">
-        <div>
-          <h3 id="albumViewTitle">Album</h3>
-          <div id="albumViewMeta" class="muted"></div>
-        </div>
-        <button id="btnCloseAlbumView" class="icon-btn">✕</button>
+        <div><h3 id="albumViewTitle">Album</h3><div id="albumViewMeta" class="muted"></div></div>
+        <button id="btnCloseAlbumView" class="icon-btn dark">✕</button>
       </div>
       <div id="albumViewGrid" class="grid"></div>
-      <div class="dialog-actions sticky">
-        <button id="btnShareAlbum" class="primary">Partager cet album</button>
-      </div>
+      <div class="dialog-actions sticky"><button id="btnShareAlbum" class="primary">Partager cet album</button></div>
     </div>
   </dialog>
 
   <dialog id="shareDialog">
     <form method="dialog" class="dialog-card">
       <h3>Partager l'album</h3>
-      <label class="field">
-        <span>Mot de passe du lien</span>
-        <input id="sharePasswordInput" type="text" autocomplete="off" placeholder="Ex. Famille-2026">
-      </label>
-      <p class="hint">Le lien public est créé uniquement quand tu valides. Le mot de passe peut rester vide si tu ne veux pas de protection.</p>
-      <div class="dialog-actions">
-        <button value="cancel" class="secondary">Annuler</button>
-        <button id="btnConfirmShare" value="default" class="primary">Créer le lien</button>
-      </div>
-      <div id="shareResult" class="share-result hidden">
-        <label class="field">
-          <span>Lien</span>
-          <input id="shareLinkOutput" readonly>
-        </label>
-        <button id="btnCopyShare" type="button" class="secondary wide">Copier le lien</button>
-      </div>
+      <label class="field"><span>Mot de passe du lien</span><input id="sharePasswordInput" type="text" autocomplete="off" placeholder="Ex. Famille-2026"></label>
+      <label class="field"><span>Expiration</span><select id="shareExpiry"><option value="">Aucune</option><option value="7">7 jours</option><option value="30">30 jours</option></select></label>
+      <p id="shareHint" class="hint">En mode réel, le lien sera créé par pCloud.</p>
+      <div class="dialog-actions"><button value="cancel" class="secondary">Annuler</button><button id="btnConfirmShare" value="default" class="primary">Créer le lien</button></div>
+      <div id="shareResult" class="share-result hidden"><label class="field"><span>Lien</span><input id="shareLinkOutput" readonly></label><button id="btnCopyShare" type="button" class="secondary wide">Copier le lien</button></div>
     </form>
   </dialog>
 
   <dialog id="viewerDialog">
     <div class="viewer">
       <button id="viewerClose" class="viewer-close">✕</button>
-      <img id="viewerImage" alt="">
+      <button id="viewerPrev" class="viewer-nav prev" aria-label="Précédente">‹</button>
+      <div id="viewerMedia" class="viewer-media"></div>
+      <button id="viewerNext" class="viewer-nav next" aria-label="Suivante">›</button>
       <div id="viewerCaption" class="viewer-caption"></div>
     </div>
   </dialog>
 
   <div id="toast" class="toast hidden"></div>
   <div id="busy" class="busy hidden"><div class="spinner"></div><span>Chargement…</span></div>
-
   <script src="app.js"></script>
 </body>
 </html>
