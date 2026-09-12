@@ -26,7 +26,7 @@
 <body>
   <header class="topbar">
     <div>
-      <div class="brand">Tri Photo Albums <span class="version">V1.6</span></div>
+      <div class="brand">Tri Photo Albums <span class="version">V1.8</span></div>
       <div id="subtitle" class="muted">pCloud • albums virtuels</div>
     </div>
     <div class="top-actions">
@@ -53,13 +53,11 @@
     <section id="screenMain" class="screen hidden">
       <div id="demoNotice" class="demo-notice hidden">Mode démonstration : albums et modifications sont locaux à cet appareil. Aucune photo pCloud n'est touchée.</div>
       <nav class="tabs"><button class="tab active" data-view="photos">Photos</button><button class="tab" data-view="albums">Albums</button></nav>
-
       <section id="viewPhotos" class="view">
         <div class="toolbar"><button id="btnUp" class="secondary">← Retour</button><div id="currentPath" class="path">/Photos</div><button id="btnRefresh" class="secondary">↻</button></div>
         <div id="selectionBar" class="selection-bar hidden"><span><strong id="selectionCount">0</strong> sélectionnée(s)</span><div class="selection-actions"><button id="btnAddExisting" class="secondary">Ajouter à un album</button><button id="btnCreateAlbum" class="primary">Nouvel album</button><button id="btnClearSelection" class="ghost">Annuler</button></div></div>
         <div id="photoGrid" class="grid"></div><div id="photosEmpty" class="empty hidden">Aucune photo/vidéo dans ce dossier.</div>
       </section>
-
       <section id="viewAlbums" class="view hidden">
         <div class="toolbar"><div><h2>Mes albums</h2><div id="albumSubtitle" class="muted">Collections pCloud — aucune copie des originaux</div></div><button id="btnRefreshAlbums" class="secondary">↻</button></div>
         <div id="albumGrid" class="album-grid"></div><div id="albumsEmpty" class="empty hidden">Aucun album pour l'instant. Sélectionne des photos puis crée ton premier album.</div>
@@ -68,7 +66,6 @@
   </main>
 
   <dialog id="albumDialog"><form method="dialog" class="dialog-card"><h3>Créer un album</h3><label class="field"><span>Nom de l'album</span><input id="albumNameInput" autocomplete="off" maxlength="120" placeholder="Ex. Martinique 2026"></label><div class="dialog-actions"><button value="cancel" class="secondary">Annuler</button><button id="btnConfirmCreateAlbum" value="default" class="primary">Créer</button></div></form></dialog>
-
   <dialog id="addDialog"><form method="dialog" class="dialog-card"><h3>Ajouter à un album</h3><select id="albumSelect" size="8"></select><div class="dialog-actions"><button value="cancel" class="secondary">Annuler</button><button id="btnConfirmAdd" value="default" class="primary">Ajouter</button></div></form></dialog>
 
   <dialog id="albumViewDialog">
@@ -79,10 +76,7 @@
         <div class="share-panel-head"><div class="share-panel-title">🔗 Partage actif</div><div id="savedShareMeta" class="share-panel-meta"></div></div>
         <input id="savedShareLink" readonly aria-label="Lien de partage enregistré">
         <div class="share-panel-actions"><button id="btnSavedCopy" class="secondary">Copier le lien</button><button id="btnSavedOpen" class="secondary">Ouvrir le lien</button></div>
-        <div id="savedLinkedRow" class="linked-copy-row hidden">
-          <div class="linked-copy-label">Nom de l'album avec le lien caché</div>
-          <div class="linked-copy-preview"><a id="savedLinkedName" href="#" target="_blank" rel="noopener">Nom de l'album</a><button id="btnSavedCopyLinked" class="secondary">Copier le nom lié</button></div>
-        </div>
+        <div id="savedLinkedRow" class="linked-copy-row hidden"><div class="linked-copy-label">Nom de l'album avec le lien caché</div><div class="linked-copy-preview"><a id="savedLinkedName" href="#" target="_blank" rel="noopener">Nom de l'album</a><button id="btnSavedCopyLinked" class="secondary">Copier le nom lié</button></div></div>
       </div>
       <div class="dialog-actions sticky"><button id="btnShareAlbum" class="primary">Créer / remplacer le lien de partage</button></div>
     </div>
@@ -98,10 +92,7 @@
       <div id="shareResult" class="share-result hidden">
         <label class="field"><span>Lien</span><input id="shareLinkOutput" readonly></label>
         <button id="btnCopyShare" type="button" class="secondary wide">Copier le lien</button>
-        <div id="shareLinkedRow" class="linked-copy-row hidden">
-          <div class="linked-copy-label">Nom de l'album avec le lien caché</div>
-          <div class="linked-copy-preview"><a id="shareLinkedName" href="#" target="_blank" rel="noopener">Nom de l'album</a><button id="btnCopyLinkedName" type="button" class="secondary">Copier le nom lié</button></div>
-        </div>
+        <div id="shareLinkedRow" class="linked-copy-row hidden"><div class="linked-copy-label">Nom de l'album avec le lien caché</div><div class="linked-copy-preview"><a id="shareLinkedName" href="#" target="_blank" rel="noopener">Nom de l'album</a><button id="btnCopyLinkedName" type="button" class="secondary">Copier le nom lié</button></div></div>
       </div>
     </form>
   </dialog>
@@ -113,5 +104,6 @@
   <script src="share-demo.js"></script>
   <script src="linked-copy.js"></script>
   <script src="album-membership.js"></script>
+  <script src="album-virtual-names.js"></script>
 </body>
 </html>
